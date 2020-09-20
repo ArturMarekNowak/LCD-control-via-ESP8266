@@ -64,7 +64,7 @@ uint8_t Received;
 
 /* USER CODE BEGIN PV */
 static RingBuffer USART_RingBuffer_Tx;
-static char RingBufferData_Tx[32];
+static char RingBufferData_Tx[100];
 
 /* USER CODE END PV */
 
@@ -108,14 +108,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 			//size = sprintf(Data, "\n\r", 2);
 			HAL_UART_Transmit_IT(&huart1,(uint8_t*) "\n\r", 2); // Rozpoczecie nadawania danych z wykorzystaniem przerwan
 			HAL_UART_Receive_IT(&huart1, &Received, 1); // Ponowne w��czenie nas�uchiwania
+
 		}
 
 		if(Received == '\r')
 		{
 			if(!RingBuffer_IsEmpty(&USART_RingBuffer_Tx))
 			{
-				HAL_UART_Transmit_IT(&huart1,(uint8_t*) RingBufferData_Tx, sizeof(USART_RingBuffer_Tx));
-				HAL_UART_Receive_IT(&huart1, &Received, 1); // Ponowne w��czenie nas�uchiwania
+				HAL_UART_Transmit_IT(&huart1, (uint8_t*) RingBufferData_Tx, sizeof(RingBufferData_Tx));
+				HAL_UART_Receive_IT(&huart1, &Received, 1);
 				RingBuffer_Clear(&USART_RingBuffer_Tx);
 			}
 			else
@@ -136,6 +137,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	//HAL_UART_Receive_IT(&huart1, &Received, 1); // Ponowne w��czenie nas�uchiwania
 
 }
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -183,7 +185,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
-  RingBuffer_Init(&USART_RingBuffer_Tx, RingBufferData_Tx, sizeof(USART_RingBuffer_Tx));
+  RingBuffer_Init(&USART_RingBuffer_Tx, RingBufferData_Tx, sizeof(RingBufferData_Tx));
 
   HAL_UART_Receive_IT(&huart1, &Received, 1);
 

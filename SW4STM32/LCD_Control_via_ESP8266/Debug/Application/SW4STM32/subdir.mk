@@ -22,7 +22,7 @@ Application/SW4STM32/startup_stm32f429xx.o: C:/Users/artur/OneDrive/Desktop/Cube
 	@echo 'Building file: $<'
 	@echo 'Invoking: MCU GCC Assembler'
 	@echo %cd%
-	arm-none-eabi-as -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -I../"/usr/lib/gcc/x86_64-linux-gnu/4.7/include" -g -o "$@" "$<"
+	arm-none-eabi-as -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -I../"/usr/lib/gcc/x86_64-linux-gnu/4.7/include" -I/usr/include/c++/4.6 -g -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

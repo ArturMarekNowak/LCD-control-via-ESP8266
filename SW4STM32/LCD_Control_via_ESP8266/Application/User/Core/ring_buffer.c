@@ -1,5 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include <assert.h>
+#include <stdlib.h>
 #include "ring_buffer.h"
 
 
@@ -29,6 +30,12 @@ bool RingBuffer_Clear(RingBuffer *ringBuffer)
 	assert(ringBuffer);
 	
 	if (ringBuffer) {
+		int i = ringBuffer -> counter;
+		while(i < ringBuffer -> max_size)
+		{
+			ringBuffer -> buffer[i] = 0;
+			i++;
+		}
 		ringBuffer -> head = 0;
 		ringBuffer -> tail = 0;
 		ringBuffer -> counter = 0;

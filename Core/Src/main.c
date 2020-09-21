@@ -120,7 +120,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 				RingBuffer_PutChar(&USART_RingBuffer_Tx, '\n');
 
 				HAL_UART_Transmit_IT(&huart6, (uint8_t*) RingBufferData_Tx, sizeof(RingBufferData_Tx));
-				HAL_UART_Transmit_IT(&huart1, "Wyslano\n\r", 11);
+				HAL_UART_Transmit_IT(&huart1, "\n\rWyslano\n\r", 12);
 				HAL_UART_Receive_IT(&huart6, &Received1, 1);
 				HAL_UART_Receive_IT(&huart1, &Received, 1);
 				RingBuffer_Clear(&USART_RingBuffer_Tx);

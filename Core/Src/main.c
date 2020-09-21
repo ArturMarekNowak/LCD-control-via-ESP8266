@@ -61,6 +61,7 @@ UART_HandleTypeDef huart6;
 SDRAM_HandleTypeDef hsdram1;
 
 uint8_t Received;
+uint8_t Received1;
 
 /* USER CODE BEGIN PV */
 static RingBuffer USART_RingBuffer_Tx;
@@ -115,7 +116,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 		{
 			if(!RingBuffer_IsEmpty(&USART_RingBuffer_Tx))
 			{
-				HAL_UART_Transmit_IT(&huart1, (uint8_t*) RingBufferData_Tx, sizeof(RingBufferData_Tx));
+				RingBuffer_PutChar(&USART_RingBuffer_Tx, '\r');
+				RingBuffer_PutChar(&USART_RingBuffer_Tx, '\n');
+
+				HAL_UART_Transmit_IT(&huart6, (uint8_t*) RingBufferData_Tx, sizeof(RingBufferData_Tx));
+				HAL_UART_Transmit_IT(&huart1, "Wyslano\n\r", 11);
+				HAL_UART_Receive_IT(&huart6, &Received1, 1);
 				HAL_UART_Receive_IT(&huart1, &Received, 1);
 				RingBuffer_Clear(&USART_RingBuffer_Tx);
 			}
@@ -184,10 +190,12 @@ int main(void)
   MX_TIM11_Init();
   MX_USART1_UART_Init();
   MX_USART6_UART_Init();
+
   /* USER CODE BEGIN 2 */
   RingBuffer_Init(&USART_RingBuffer_Tx, RingBufferData_Tx, sizeof(RingBufferData_Tx));
 
   HAL_UART_Receive_IT(&huart1, &Received, 1);
+  HAL_UART_Receive_IT(&huart6, &Received1, 1);
 
   /*
   BSP_LCD_Init();

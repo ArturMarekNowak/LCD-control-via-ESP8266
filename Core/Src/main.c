@@ -133,11 +133,6 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
-  Ringbuf_init();
-
-  //ESP_Init("AndroidAP","ovzl1289");
-
-  /*
   BSP_LCD_Init();
   BSP_LCD_LayerDefaultInit(LCD_BACKGROUND_LAYER, LCD_FRAME_BUFFER);
   BSP_LCD_LayerDefaultInit(LCD_FOREGROUND_LAYER, LCD_FRAME_BUFFER);
@@ -145,11 +140,17 @@ int main(void)
   BSP_LCD_DisplayOn();
   BSP_LCD_Clear(LCD_COLOR_BLUE);
   BSP_LCD_SetTextColor(LCD_COLOR_DARKGRAY);
-  BSP_LCD_DisplayStringAtLine(5, (uint8_t*)"TEST xDDDDD");
+  BSP_LCD_DisplayStringAtLine(5, (uint8_t*)"LCD Control");
+  BSP_LCD_DisplayStringAtLine(6, (uint8_t*)"via ESP8266");
   HAL_Delay(1000);
   BSP_LCD_Clear(LCD_COLOR_RED);
-  */
 
+
+
+
+  Ringbuf_init();
+
+  ESP_Init("AndroidAP","ovzl1289");
 
   /* USER CODE END 2 */
 
@@ -161,23 +162,17 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  //Server_Start();
+	  Server_Start();
 	  //HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_2);
 	  //Uart_sendstring("xD", &huart6);
 	  //HAL_Delay(500);
 
 
-
+	  /*
 	  if(IsDataAvailable(pc_uart))
 	  {
 
 		  int data = Uart_read(pc_uart);
-
-		  if(data == 112)
-		  {
-			Uart_write(112, wifi_uart);
-		  }
-
 		  Uart_write(data, wifi_uart);
 	  }
 
@@ -186,7 +181,7 @@ int main(void)
 	  		  int data = Uart_read(wifi_uart);
 	  		  Uart_write(data, pc_uart);
 	  	  }
-
+	*/
 
   }
   /* USER CODE END 3 */

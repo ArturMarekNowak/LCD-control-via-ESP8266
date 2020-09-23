@@ -10,6 +10,7 @@
 #include "ESP8266_HAL.h"
 #include "stdio.h"
 #include "string.h"
+#include "stm32f429i_discovery_lcd.h"
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart6;
@@ -157,13 +158,15 @@ void Server_Start (void)
 	while (!(Copy_upto(" HTTP/1.1", buftocopyinto, wifi_uart)));
 	if (Look_for("/ledon", buftocopyinto) == 1)
 	{
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
+		//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
+		BSP_LCD_Clear(LCD_COLOR_RED);
 		Server_Handle("/ledon",Link_ID);
 	}
 
 	else if (Look_for("/ledoff", buftocopyinto) == 1)
 	{
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
+		//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
+		BSP_LCD_Clear(LCD_COLOR_GREEN);
 		Server_Handle("/ledoff",Link_ID);
 	}
 

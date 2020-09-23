@@ -24,8 +24,8 @@
 /* USER CODE BEGIN Includes */
 #include "stm32f429i_discovery_lcd.h"
 #include "stm32f4xx_hal.h"
-#include "ring_buffer.h"
-
+#include "ESP8266_HAL.h"
+#include "UartRingbuffer_multi.h"
 
 /* USER CODE END Includes */
 
@@ -60,12 +60,9 @@ UART_HandleTypeDef huart6;
 
 SDRAM_HandleTypeDef hsdram1;
 
-uint8_t Received;
-uint8_t Received1;
 
 /* USER CODE BEGIN PV */
-static RingBuffer USART_RingBuffer_Tx;
-static char RingBufferData_Tx[100];
+
 
 /* USER CODE END PV */
 
@@ -82,67 +79,6 @@ static void MX_TIM11_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART6_UART_Init(void);
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-
-	/* CR -
-	 *
-	 *
-	 *
-	 */
-
-	uint8_t Data[50]; // Tablica przechowujaca wysylana wiadomosc.
-	uint16_t size = 0; // Rozmiar wysylanej wiadomosci
-
-	size = sprintf(Data, "%c", Received);
-
-	if(Received != '\r' && Received != '\n')
-	{
-		RingBuffer_PutChar(&USART_RingBuffer_Tx, Received);
-
-		HAL_UART_Transmit_IT(&huart1, Data, size); // Rozpoczecie nadawania danych z wykorzystaniem przerwan
-		HAL_UART_Receive_IT(&huart1, &Received, 1); // Ponowne w��czenie nas�uchiwania
-	}
-	else
-	{
-		if(Received == '\n')
-		{
-			//size = sprintf(Data, "\n\r", 2);
-			HAL_UART_Transmit_IT(&huart1,(uint8_t*) "\n\r", 2); // Rozpoczecie nadawania danych z wykorzystaniem przerwan
-			HAL_UART_Receive_IT(&huart1, &Received, 1); // Ponowne w��czenie nas�uchiwania
-
-		}
-
-		if(Received == '\r')
-		{
-			if(!RingBuffer_IsEmpty(&USART_RingBuffer_Tx))
-			{
-				RingBuffer_PutChar(&USART_RingBuffer_Tx, '\r');
-				RingBuffer_PutChar(&USART_RingBuffer_Tx, '\n');
-
-				HAL_UART_Transmit_IT(&huart6, (uint8_t*) RingBufferData_Tx, sizeof(RingBufferData_Tx));
-				HAL_UART_Transmit_IT(&huart1, "\n\rWyslano\n\r", 12);
-				HAL_UART_Receive_IT(&huart6, &Received1, 1);
-				HAL_UART_Receive_IT(&huart1, &Received, 1);
-				RingBuffer_Clear(&USART_RingBuffer_Tx);
-			}
-			else
-			{
-				HAL_UART_Transmit_IT(&huart1,(uint8_t*) "Buffer is empty\n\r", 17); // Rozpoczecie nadawania danych z wykorzystaniem przerwan
-				HAL_UART_Receive_IT(&huart1, &Received, 1); // Ponowne w��czenie nas�uchiwania
-			}
-		}
-
-	}
-
-	//uint8_t Data[50]; // Tablica przechowujaca wysylana wiadomosc.
-	//uint16_t size = 0; // Rozmiar wysylanej wiadomosci
-
-	//size = sprintf(Data, "%c\n\r", Received);
-
-	//HAL_UART_Transmit_IT(&huart1, Data, size); // Rozpoczecie nadawania danych z wykorzystaniem przerwan
-	//HAL_UART_Receive_IT(&huart1, &Received, 1); // Ponowne w��czenie nas�uchiwania
-
-}
 
 /* USER CODE BEGIN PFP */
 
@@ -150,6 +86,9 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+#define pc_uart &huart6
+#define wifi_uart &huart1
 
 /* USER CODE END 0 */
 
@@ -192,10 +131,11 @@ int main(void)
   MX_USART6_UART_Init();
 
   /* USER CODE BEGIN 2 */
-  RingBuffer_Init(&USART_RingBuffer_Tx, RingBufferData_Tx, sizeof(RingBufferData_Tx));
 
-  HAL_UART_Receive_IT(&huart1, &Received, 1);
-  HAL_UART_Receive_IT(&huart6, &Received1, 1);
+
+  Ringbuf_init();
+
+  //ESP_Init("AndroidAP","ovzl1289");
 
   /*
   BSP_LCD_Init();
@@ -220,6 +160,34 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+	  //Server_Start();
+	  //HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_2);
+	  //Uart_sendstring("xD", &huart6);
+	  //HAL_Delay(500);
+
+
+
+	  if(IsDataAvailable(pc_uart))
+	  {
+
+		  int data = Uart_read(pc_uart);
+
+		  if(data == 112)
+		  {
+			Uart_write(112, wifi_uart);
+		  }
+
+		  Uart_write(data, wifi_uart);
+	  }
+
+	  if(IsDataAvailable(wifi_uart))
+	  	  {
+	  		  int data = Uart_read(wifi_uart);
+	  		  Uart_write(data, pc_uart);
+	  	  }
+
+
   }
   /* USER CODE END 3 */
 }

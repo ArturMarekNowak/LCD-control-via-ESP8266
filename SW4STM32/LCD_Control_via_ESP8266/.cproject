@@ -205,6 +205,52 @@
                         					
                     </folderInfo>
                     					
+                    <folderInfo id="fr.ac6.managedbuild.config.gnu.cross.exe.debug.1891179591.2107831556" name="/" resourcePath="Application/User/Core">
+                        						
+                        <toolChain id="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug.334534775" name="Ac6 STM32 MCU GCC" superClass="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug" unusedChildren="">
+                            							
+                            <option id="fr.ac6.managedbuild.option.gnu.cross.prefix.1508829740.507497741" name="Prefix" superClass="fr.ac6.managedbuild.option.gnu.cross.prefix.1508829740"/>
+                            							
+                            <option id="fr.ac6.managedbuild.option.gnu.cross.mcu.335619826.1098321195" name="Mcu" superClass="fr.ac6.managedbuild.option.gnu.cross.mcu.335619826"/>
+                            							
+                            <option id="fr.ac6.managedbuild.option.gnu.cross.board.1408415399.54002907" name="Board" superClass="fr.ac6.managedbuild.option.gnu.cross.board.1408415399"/>
+                            							
+                            <option id="fr.ac6.managedbuild.option.gnu.cross.core.1083960614.1978940109" name="Core" superClass="fr.ac6.managedbuild.option.gnu.cross.core.1083960614"/>
+                            							
+                            <option id="fr.ac6.managedbuild.option.gnu.cross.instructionSet.351888521.1678157711" name="Instruction Set" superClass="fr.ac6.managedbuild.option.gnu.cross.instructionSet.351888521"/>
+                            							
+                            <option id="fr.ac6.managedbuild.option.gnu.cross.fpu.510671949.947055022" name="Floating point hardware" superClass="fr.ac6.managedbuild.option.gnu.cross.fpu.510671949"/>
+                            							
+                            <option id="fr.ac6.managedbuild.option.gnu.cross.floatabi.597980344.566948859" name="Floating-point ABI" superClass="fr.ac6.managedbuild.option.gnu.cross.floatabi.597980344"/>
+                            							
+                            <tool id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.2003123303" name="MCU GCC Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1725251141">
+                                								
+                                <inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.230730525" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
+                                								
+                                <inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1901482767" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
+                                							
+                            </tool>
+                            							
+                            <tool id="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.2694716" name="MCU G++ Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.compiler.1529815239"/>
+                            							
+                            <tool id="fr.ac6.managedbuild.tool.gnu.cross.c.linker.1135841130" name="MCU GCC Linker" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.linker.1763876583"/>
+                            							
+                            <tool id="fr.ac6.managedbuild.tool.gnu.cross.cpp.linker.2107428650" name="MCU G++ Linker" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.linker.154543432"/>
+                            							
+                            <tool id="fr.ac6.managedbuild.tool.gnu.archiver.110397794" name="MCU GCC Archiver" superClass="fr.ac6.managedbuild.tool.gnu.archiver.1283955468"/>
+                            							
+                            <tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.1963277309" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.770388054">
+                                								
+                                <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1848489085" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+                                								
+                                <inputType id="fr.ac6.managedbuild.tool.gnu.cross.assembler.input.1300293090" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.input"/>
+                                							
+                            </tool>
+                            						
+                        </toolChain>
+                        					
+                    </folderInfo>
+                    					
                     <fileInfo id="fr.ac6.managedbuild.config.gnu.cross.exe.debug.1891179591.1316669893" name="main.c" rcbsApplicability="disable" resourcePath="Application/User/Core/main.c" toolsToInvoke="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1725251141.655514098">
                         						
                         <tool id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1725251141.655514098" name="MCU GCC Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1725251141">
@@ -241,7 +287,7 @@
                     					
                     <sourceEntries>
                         						
-                        <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+                        <entry excluding="Src|STM32F429I-Discovery|ili9341" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
                         						
                         <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="STM32F429I-Discovery"/>
                         						
@@ -499,11 +545,13 @@
     	
     <storageModule moduleId="refreshScope" versionNumber="2">
         		
-        <configuration artifactName="${ProjName}" configurationName="Debug">
+        <configuration configurationName="Debug">
             			
-            <resource resourceType="PROJECT" workspacePath="LCD_Control_via_ESP8266"/>
+            <resource resourceType="PROJECT" workspacePath="/LCD_Control_via_ESP8266"/>
             		
         </configuration>
+        		
+        <configuration configurationName="Release"/>
         	
     </storageModule>
     	

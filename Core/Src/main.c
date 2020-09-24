@@ -36,6 +36,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+#define pc_uart &huart6
+#define wifi_uart &huart1
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -63,6 +67,8 @@ SDRAM_HandleTypeDef hsdram1;
 
 /* USER CODE BEGIN PV */
 
+uint8_t Received;
+uint8_t Received1;
 
 /* USER CODE END PV */
 
@@ -82,13 +88,29 @@ static void MX_USART6_UART_Init(void);
 
 /* USER CODE BEGIN PFP */
 
+void HAL_UART_RxCpltCallback (UART_HandleTypeDef *huart)
+{
+
+	  if(IsDataAvailable(pc_uart))
+	  {
+		  int data = Uart_read(pc_uart);
+		  Uart_write(data, wifi_uart);
+		  HAL_UART_Receive_IT(pc_uart, &Received, 1);
+	  }
+
+
+	  if(IsDataAvailable(wifi_uart))
+	  {
+	  		  int data = Uart_read(wifi_uart);
+	  		  Uart_write(data, pc_uart);
+	  		  HAL_UART_Receive_IT(wifi_uart, &Received, 1);
+	  }
+
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-#define pc_uart &huart6
-#define wifi_uart &huart1
 
 /* USER CODE END 0 */
 
@@ -132,6 +154,8 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
 
+  HAL_UART_Receive_IT(pc_uart, &Received, 1);
+  HAL_UART_Receive_IT(wifi_uart, &Received1, 1);
 
   BSP_LCD_Init();
   BSP_LCD_LayerDefaultInit(LCD_BACKGROUND_LAYER, LCD_FRAME_BUFFER);
@@ -140,17 +164,17 @@ int main(void)
   BSP_LCD_DisplayOn();
   BSP_LCD_Clear(LCD_COLOR_BLUE);
   BSP_LCD_SetTextColor(LCD_COLOR_DARKGRAY);
-  BSP_LCD_DisplayStringAtLine(5, (uint8_t*)"LCD Control");
-  BSP_LCD_DisplayStringAtLine(6, (uint8_t*)"via ESP8266");
+  BSP_LCD_DisplayStringAtLine(5, (uint8_t*)"\tLCD Control");
+  BSP_LCD_DisplayStringAtLine(6, (uint8_t*)"\tvia ESP8266");
   HAL_Delay(1000);
-  BSP_LCD_Clear(LCD_COLOR_RED);
+  BSP_LCD_Clear(LCD_COLOR_GREEN);
 
 
 
 
   Ringbuf_init();
 
-  ESP_Init("AndroidAP","ovzl1289");
+  ESP_Init("Tawtorka<3","ovzl1289");
 
   /* USER CODE END 2 */
 
@@ -181,7 +205,10 @@ int main(void)
 	  		  int data = Uart_read(wifi_uart);
 	  		  Uart_write(data, pc_uart);
 	  	  }
-	*/
+	  	  */
+
+
+
 
   }
   /* USER CODE END 3 */

@@ -24,7 +24,7 @@ char buffer[20];
 
 char *Basic_inclusion = "<!DOCTYPE html> <html>\n<head><meta name=\"viewport\"\
 		content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n\
-		<title>LED CONTROL</title>\n<style>html { font-family: Helvetica; \
+		<title>LCD CONTROL</title>\n<style>html { font-family: Helvetica; \
 		display: inline-block; margin: 0px auto; text-align: center;}\n\
 		body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;}\
 		h3 {color: #444444;margin-bottom: 50px;}\n.button {display: block;\
@@ -34,10 +34,10 @@ char *Basic_inclusion = "<!DOCTYPE html> <html>\n<head><meta name=\"viewport\"\
 		.button-on {background-color: #1abc9c;}\n.button-on:active \
 		{background-color: #16a085;}\n.button-off {background-color: #34495e;}\n\
 		.button-off:active {background-color: #2c3e50;}\np {font-size: 14px;color: #888;margin-bottom: 10px;}\n\
-		</style>\n</head>\n<body>\n<h1>ESP8266 LED CONTROL</h1>\n";
+		</style>\n</head>\n<body>\n<h1>LCD control via ESP8266</h1>\n";
 
-char *LED_ON = "<p>LED Status: ON</p><a class=\"button button-off\" href=\"/ledoff\">OFF</a>";
-char *LED_OFF = "<p>LED1 Status: OFF</p><a class=\"button button-on\" href=\"/ledon\">ON</a>";
+char *LCD_RED = "<p>LCD Status: RED</p><a class=\"button button-green\" href=\"/lcdgreen\">GREEN</a>";
+char *LCD_GREEN = "<p>LCD Status: GREEN</p><a class=\"button button-red\" href=\"/lcdred\">RED</a>";
 char *Terminate = "</body></html>";
 
 
@@ -123,29 +123,31 @@ int Server_Send (char *str, int Link_ID)
 void Server_Handle (char *str, int Link_ID)
 {
 	char datatosend[1024] = {0};
-	if (!(strcmp (str, "/ledon")))
+	if (!(strcmp (str, "/lcdred")))
 	{
 		sprintf (datatosend, Basic_inclusion);
-		strcat(datatosend, LED_ON);
+		strcat(datatosend, LCD_RED);
 		strcat(datatosend, Terminate);
 		Server_Send(datatosend, Link_ID);
 	}
 
-	else if (!(strcmp (str, "/ledoff")))
+	else if (!(strcmp (str, "/lcdgreen")))
 	{
 		sprintf (datatosend, Basic_inclusion);
-		strcat(datatosend, LED_OFF);
+		strcat(datatosend, LCD_GREEN);
 		strcat(datatosend, Terminate);
 		Server_Send(datatosend, Link_ID);
 	}
+
 
 	else
 	{
 		sprintf (datatosend, Basic_inclusion);
-		strcat(datatosend, LED_OFF);
+		strcat(datatosend, LCD_GREEN);
 		strcat(datatosend, Terminate);
 		Server_Send(datatosend, Link_ID);
 	}
+
 
 }
 
@@ -156,18 +158,18 @@ void Server_Start (void)
 	while (!(Get_after("+IPD,", 1, &Link_ID, wifi_uart)));
 	Link_ID -= 48;
 	while (!(Copy_upto(" HTTP/1.1", buftocopyinto, wifi_uart)));
-	if (Look_for("/ledon", buftocopyinto) == 1)
+	if (Look_for("/lcdred", buftocopyinto) == 1)
 	{
 		//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
 		BSP_LCD_Clear(LCD_COLOR_RED);
-		Server_Handle("/ledon",Link_ID);
+		Server_Handle("/lcdred",Link_ID);
 	}
 
-	else if (Look_for("/ledoff", buftocopyinto) == 1)
+	else if (Look_for("/lcdgreen", buftocopyinto) == 1)
 	{
 		//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
 		BSP_LCD_Clear(LCD_COLOR_GREEN);
-		Server_Handle("/ledoff",Link_ID);
+		Server_Handle("/lcdgreen",Link_ID);
 	}
 
 	else if (Look_for("/favicon.ico", buftocopyinto) == 1)
@@ -177,7 +179,7 @@ void Server_Start (void)
 
 	else
 	{
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
+		BSP_LCD_Clear(LCD_COLOR_GREEN);
 		Server_Handle("/ ", Link_ID);
 	}
 }
